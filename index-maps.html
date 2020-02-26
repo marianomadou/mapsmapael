@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>mapa mariano jquery</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+        .contenedor {
+            max-width: 500px;
+            margin-left: 60vh;
+        }
+        
+        .ui-widget-header,
+        .ui-state-default,
+        ui-button {
+            background: #00b7ff;
+            border: 1px solid #006cc5;
+            color: #FFFFFF;
+            font-weight: normal;
+        }
+        
+        .mapael .map {
+            position: relative;
+        }
+        
+        .mapael .mapTooltip {
+            position: absolute;
+            background-color: #fff;
+            moz-opacity: 0.70;
+            opacity: 0.70;
+            filter: alpha(opacity=70);
+            border-radius: 10px;
+            padding: 10px;
+            z-index: 1000;
+            max-width: 200px;
+            display: none;
+            color: #343434;
+        }
+        
+        @media (max-width: 768px) {
+            .contenedor {
+                max-width: 400px;
+                margin: auto;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <main>
+
+        <div class="row">
+            <section id="principal">
+                <div class="row">
+                    <div class="col-lg-12 mx-auto">
+                        <div class="contenedor ">
+                            <div class="map"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js" charset="utf-8"></script>
+    <script src="http://minfinanzas.gob.ar/mapa-provincias/mapael/js/jquery.mapael.js" charset="utf-8"></script>
+    <script src="http://minfinanzas.gob.ar/mapa-provincias/mapael/js/maps/argentina.js" charset="utf-8"></script>
+
+</body>
+
+<!-- dialogo de buenos aires -->
+<div class="modal fade" id="dialogbsas" tabindex="-1" role="dialog" aria-labelledby="dialogbsasLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogbsasLabel">Buenos Aires</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www8.arba.gov.ar/codFiscal/sinsso/consultaAction.do?method=getFileInformeTecnico" target="_blank">Código Fiscal - Ley 10397</a></p>
+                <p><a href="http://www8.arba.gov.ar/codFiscal/sinsso/consultaAction.do?method=getFileInformeTecnico" target="_blank">Ley tarifaria - Ley 15170</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- dialogo de CABA -->
+<div class="modal fade" id="dialogcaba" tabindex="-1" role="dialog" aria-labelledby="dialogcabaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogcabaLabel">Ciudad Autónoma de Buenos Aires</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.cedom.gov.ar/codigos.aspx" target="_blank">Código Fiscal - Ley 6279</a></p>
+                <p><a href="https://www.agip.gob.ar/normativa/leyes/2019/ley-n-6280--2019---ley-tarifaria-con-vigencia-2020" target="_blank">Ley tarifaria - Ley 6280</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de CABA -->
+
+<!-- dialogo de Entre Ríos -->
+<div class="modal fade" id="dialogentrerios" tabindex="-1" role="dialog" aria-labelledby="dialogentreriosLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogentreriosLabel">Entre Ríos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://www.ater.gob.ar/ater2/archivos/Codigo%20Fiscal%20-Ley9622-Decreto3564-%202018.pdf" target="_blank">Código Fiscal - Ley 6505</a></p>
+                <p><a href="https://www.ater.gob.ar/Normativas/uploaded/2019/ley%20n%C2%B0%2010781.pdf" target="_blank">Ley tarifaria - Ley 10781</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Entre Ríos -->
+
+<!-- dialogo de Catamarca -->
+<div class="modal fade" id="dialogcatamarca" tabindex="-1" role="dialog" aria-labelledby="dialogcatamarcaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogcatamarcaLabel">Catamarca</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://www.agrentas.gov.ar/codigo_tributario.php" target="_blank">Código Fiscal - Ley
+                        5022</a></p>
+                <p><a href="https://www.agrentas.gov.ar/Leyes_Decretos/2020/LEY%20N%C2%B0%205638%20-LEY%20IMPOSITIVA%20PARA%20EJERCICIO%20FISCAL%202020.pdf" target="_blank">Ley tarifaria - Ley 5638</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Catamarca -->
+<!-- dialogo de Chaco -->
+<div class="modal fade" id="dialogchacho" tabindex="-1" role="dialog" aria-labelledby="dialogchachoLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogchachoLabel">Chaco</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://atp.chaco.gob.ar/legislacion/L%2083%20F.pdf" target="_blank">Código Fiscal - Ley
+                        83-F</a></p>
+                <p><a href="https://atp.chaco.gob.ar/legislacion/leyes/2965-f.pdf" target="_blank">Ley tarifaria - Ley
+                        2965</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Chaco -->
+
+<!-- dialogo de Cordoba -->
+<div class="modal fade" id="dialogcordoba" tabindex="-1" role="dialog" aria-labelledby="dialogcordobaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogcordobaLabel">Córdoba</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://portal.rentascordoba.gob.ar/frontend/page?4,sitio,if-codigo-tributario-provincial,O,es,0," target="_blank">Código Fiscal - Ley 6006</a></p>
+                <p><a href="https://portal.rentascordoba.gob.ar/frontend/page?4,sitio,if-ley-impositiva-anual,O,es,0," target="_blank">Ley tarifaria - Ley L 10.680 y D 2029/19</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Cordoba -->
+
+<!-- dialogo de Corrientes -->
+<div class="modal fade" id="dialogcorrientes" tabindex="-1" role="dialog" aria-labelledby="dialogcorrientesLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogcorrientesLabel">Corrientes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.dgrcorrientes.gov.ar/rentastdr/contenidos/archivos%20pdf/codigo%20fiscal%2030072019.pdf" target="_blank">Código Fiscal - Ley 3037</a></p>
+                <p><a href="https://www.dgrcorrientes.gov.ar/rentascorrientes/jsp/informacion/actividades.jsp" target="_blank">Ley tarifaria - Ley D 1940/18</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Corrientes -->
+
+<!-- dialogo de Chubut -->
+<div class="modal fade" id="dialogchubut" tabindex="-1" role="dialog" aria-labelledby="dialogchubutLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogchubutLabel">Chubut</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.dgrchubut.gov.ar/wp-content/uploads/codigo-fiscal-ley-86.pdf" target="_blank">Código Fiscal - Ley XXIV Nº 86</a></p>
+                <p><a href="http://www.dgrchubut.gov.ar/wp-content/uploads/LOT-87-A%C3%91O-2020.pdf" target="_blank">Ley
+                        tarifaria - Ley XXIV nº 87</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Chubut -->
+
+<!-- dialogo de Formosa -->
+<div class="modal fade" id="dialogformosa" tabindex="-1" role="dialog" aria-labelledby="dialogformosaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogformosaLabel">Formosa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://www.dgrformosa.gob.ar/descargas/docs/ley-1589.pdf" target="_blank">Código Fiscal -
+                        Ley 1589</a></p>
+                <p><a href="https://www.dgrformosa.gob.ar/descargas/docs/ley-1682.pdf" target="_blank">Ley tarifaria -
+                        Ley 1682</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Formosa -->
+
+<!-- dialogo de Jujuy -->
+<div class="modal fade" id="dialogjujuy" tabindex="-1" role="dialog" aria-labelledby="dialogjujuyLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogjujuyLabel">Jujuy</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.rentasjujuy.gob.ar/wp-content/uploads/C%C3%B3digo-Fiscal-N-5791-2018-Para-Web.pdf" target="_blank">Código Fiscal - Ley 5791</a></p>
+                <p><a href="http://www.rentasjujuy.gob.ar/wp-content/uploads/Ley-6150-Ley-Impositiva-a%C3%B1o-2020-1.pdf" target="_blank">Ley tarifaria - Ley 6150</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Jujuy -->
+
+<!-- dialogo de La Pampa -->
+<div class="modal fade" id="dialoglapampa" tabindex="-1" role="dialog" aria-labelledby="dialoglapampaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialoglapampaLabel">La Pampa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://dgr.lapampa.gob.ar/images/Archivos/Normativa/Codigo_Fiscal/Codigo_fiscal_modificado_ley_3143.pdf" target="_blank">Código Fiscal - Ley 271</a></p>
+                <p><a href="https://dgr.lapampa.gob.ar/ley-impositiva-ano-2019/1667-ley-n-3210-impositiva-ano-2020.html" target="_blank">Ley tarifaria - Ley 3210</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de La Pampa -->
+
+<!-- dialogo de La Rioja -->
+<div class="modal fade" id="dialoglarioja" tabindex="-1" role="dialog" aria-labelledby="dialoglariojaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialoglariojaLabel">La Rioja</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.dgiplarioja.gob.ar/archivos/Legislacion/Codigo%20Tributario/CodigoTributario2020.pdf" target="_blank">Código Fiscal - Ley 4040</a></p>
+                <p><a href="https://www.dgiplarioja.gob.ar/frontend51/page?1,principal,leyes-impositivas,O,es,0," target="_blank">Ley tarifaria - Ley 10234</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de La Rioja -->
+
+<!-- dialogo de Mendoza -->
+<div class="modal fade" id="dialogmendoza" tabindex="-1" role="dialog" aria-labelledby="dialogmendozaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogmendozaLabel">Mendoza</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://www.atm.mendoza.gov.ar/portalatm/zoneBottom/normativas/codigoFiscal/pdf/codigo_fiscal_2020.pdf" target="_blank">Código Fiscal - Ley 4362</a></p>
+                <p><a href="https://www.atm.mendoza.gov.ar/portalatm/zoneBottom/normativas/leyimpositiva/leyImpositiva2020.jsp" target="_blank">Ley tarifaria - Ley 9212</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Mendoza -->
+
+<!-- dialogo de Mendoza -->
+<div class="modal fade" id="dialogmendoza" tabindex="-1" role="dialog" aria-labelledby="dialogmendozaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogmendozaLabel">Mendoza</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://www.atm.mendoza.gov.ar/portalatm/zoneBottom/normativas/codigoFiscal/pdf/codigo_fiscal_2020.pdf" target="_blank">Código Fiscal - Ley 4362</a></p>
+                <p><a href="https://www.atm.mendoza.gov.ar/portalatm/zoneBottom/normativas/leyimpositiva/leyImpositiva2020.jsp" target="_blank">Ley tarifaria - Ley 9212</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Mendoza -->
+
+<!-- dialogo de Misiones -->
+<div class="modal fade" id="dialogmisiones" tabindex="-1" role="dialog" aria-labelledby="dialogmisionesLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogmisionesLabel">Misiones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://www.dgr.misiones.gov.ar/portal/phocadownload/pdf/codigo_fiscal.pdf" target="_blank">Código Fiscal - Ley XXII – Nº 35</a></p>
+                <p><a href="https://www.dgr.misiones.gov.ar/extranet/scf/consulta_actividades.php" target="_blank">Ley
+                        tarifaria - Ley RG 23/19</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Misiones -->
+
+<!-- dialogo de Neuquén -->
+<div class="modal fade" id="dialogneuquen" tabindex="-1" role="dialog" aria-labelledby="dialogneuquenLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogneuquenLabel">Neuquén</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://dprneuquen.gob.ar/category/legislacion/codigo_fiscal/" target="_blank">Código Fiscal
+                        - Ley 2680</a></p>
+                <p><a href="http://dprneuquen.gob.ar/category/legislacion/ley_impositiva/" target="_blank">Ley tarifaria
+                        - Ley 3229</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Neuquén -->
+
+<!-- dialogo de Río Negro -->
+<div class="modal fade" id="dialogrionegro" tabindex="-1" role="dialog" aria-labelledby="dialogrionegroLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogrionegroLabel">Río Negro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.rionegro.gov.ar/?contID=13533" target="_blank">Código Fiscal - Ley 2686</a></p>
+                <p><a href="http://www.rionegro.gov.ar/?contID=13554" target="_blank">Ley tarifaria - Ley 5430</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Río Negro -->
+
+<!-- dialogo de Salta-->
+<div class="modal fade" id="dialogsalta" tabindex="-1" role="dialog" aria-labelledby="dialogsaltaLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogsaltaLabel">Salta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://www.dgrsalta.gov.ar/rentassalta/jsp/informacionFisc/normativas2.jsp#codigo_fiscal_act" target="_blank">Código Fiscal - Ley DL 9/75</a></p>
+                <p><a href="https://www.dgrsalta.gov.ar/rentassalta/jsp/informacionFisc/normativas2.jsp" target="_blank">Ley tarifaria - Ley 8177</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Salta -->
+
+<!-- dialogo de San Juan-->
+<div class="modal fade" id="dialogsanjuan" tabindex="-1" role="dialog" aria-labelledby="dialogsanjuanLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogsanjuanLabel">San Juan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://rentas.sanjuan.gov.ar/legales/SJ_CT_(t.a.24-01-2020).pdf" target="_blank">Código
+                        Fiscal - Ley 151-I</a></p>
+                <p><a href="https://rentas.sanjuan.gov.ar/legales/Ley_2026-I.pdf" target="_blank">Ley tarifaria - Ley
+                        2026-I</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de San Juan -->
+
+<!-- dialogo de San Luís-->
+<div class="modal fade" id="dialogsanluis" tabindex="-1" role="dialog" aria-labelledby="dialogsanluisLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogsanluisLabel">San Luis</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.rentas.sanluis.gov.ar/resoluciones/CODIGO-TRIBUTARIO-REFORMA-2019.pdf" target="_blank">Código Fiscal - Ley 490</a></p>
+                <p><a href="http://www.rentas.sanluis.gov.ar//index.php?option=com_content&task=view&id=96&Itemid=269" target="_blank">Ley tarifaria - Ley 254</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de San Luís -->
+
+<!-- dialogo de Santa Cruz-->
+<div class="modal fade" id="dialogsantacruz" tabindex="-1" role="dialog" aria-labelledby="dialogsantacruzLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogsantacruzLabel">Santa Cruz</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://www.asip.gob.ar/legislacion/#1461428732634-81334461-7821" target="_blank">Código
+                        Fiscal - Ley 3486</a></p>
+                <p><a href="https://www.asip.gob.ar/legislacion/#1461428732756-209b050e-993d" target="_blank">Ley
+                        tarifaria - Ley 3485</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Santa Cruz -->
+
+<!-- dialogo de Santa Fé-->
+<div class="modal fade" id="dialogsantafe" tabindex="-1" role="dialog" aria-labelledby="dialogsantafeLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogsantafeLabel">Santa Fé</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="https://www.santafe.gov.ar/index.php/web/content/view/full/111527/(subtema)/111523" target="_blank">Código Fiscal - Ley 3456</a></p>
+                <p><a href="https://www.santafe.gov.ar/index.php/web/content/download/257134/1354998/file/LEY13976.pdf" target="_blank">Ley tarifaria - Ley 13976</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Santa Fé -->
+
+<!-- dialogo de Santiago del Estero-->
+<div class="modal fade" id="dialogsantiago" tabindex="-1" role="dialog" aria-labelledby="dialogsantiagoLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogsantiagoLabel">Santiago del Estero</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.dgrsantiago.gov.ar/wp-content/uploads/2019/05/DESCARGAR-CODIGO-FISCAL.pdf" target="_blank">Código Fiscal - Ley 6792</a></p>
+                <p><a href="http://www.dgrsantiago.gov.ar/wp-content/uploads/2019/01/DESCARGAR-LEY-7.271-1.pdf" target="_blank">Ley tarifaria - Ley 7271</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Santiago del Estero-->
+
+<!-- dialogo de Tierra del Fuego-->
+<div class="modal fade" id="dialogtdf" tabindex="-1" role="dialog" aria-labelledby="dialogtdfLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogtdfLabel">Tierra del Fuego</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.aref.gob.ar/category/normativa/leyes/codigo-fiscal/" target="_blank">Código
+                        Fiscal</a></p>
+                <p><a href="http://www.aref.gob.ar/ley-1255-reduccion-de-alicuotas-para-determinadas-actividades-fondo-de-financiamiento-de-servicios-sociales-alicuotas-diferenciales-adicionales/" target="_blank">Ley tarifaria - Ley 1255</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Tierra del Fuego-->
+
+<!-- dialogo de Tucumán-->
+<div class="modal fade" id="dialogtucuman" tabindex="-1" role="dialog" aria-labelledby="dialogtucumanLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title " id="dialogtucumanLabel">Tucumán</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><a href="http://www.rentastucuman.gob.ar/nomina/rentastuc2/x1ut2pa3lo/pdfs/ctp.pdf#zoom=80" target="_blank">Código Fiscal - Ley 5121</a></p>
+                <p><a href="http://www.rentastucuman.gob.ar/nomina/rentastuc2/x1ut2pa3lo/pdfs/leyimpositiva.pdf#zoom=80" target="_blank">Ley tarifaria - Ley 8467</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin dialogo de Tucumán-->
+
+</html>
+<script>
+    $(document).ready(function() {
+        $(".contenedor").mapael({
+            map: {
+                name: "argentina"
+            },
+            areas: {
+                "bsas": {
+                    tooltip: {
+                        content: "Buenos Aires"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogbsas").modal();
+                            });
+                        }
+                    }
+                },
+
+                "malvinas": {
+                    tooltip: {
+                        content: "Islas Malvinas"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogmalvinas").modal();
+                            });
+
+                        }
+                    }
+                },
+
+                "tierradelfuego": {
+                    tooltip: {
+                        content: "Tierra del Fuego"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogtdf").modal();
+                            });
+                        }
+                    }
+                },
+
+                "santacruz": {
+                    tooltip: {
+                        content: "Santa Cruz"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogsantacruz").modal();
+                            });
+                        }
+                    }
+                },
+
+                "chubut": {
+                    tooltip: {
+                        content: "Chubut"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogchubut").modal();
+                            });
+                        }
+                    }
+                },
+
+                "sanluis": {
+                    tooltip: {
+                        content: "San Luis"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogsanluis").modal();
+                            });
+                        }
+                    }
+                },
+
+                "neuquen": {
+                    tooltip: {
+                        content: "Neuquen"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogneuquen").modal();
+                            });
+                        }
+                    }
+                },
+
+                "rionegro": {
+                    tooltip: {
+                        content: "R&iacute;o Negro"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogrionegro").modal();
+                            });
+                        }
+                    }
+                },
+
+                "lapampa": {
+                    tooltip: {
+                        content: "La Pampa"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialoglapampa").modal();
+                            });
+                        }
+                    }
+                },
+
+                "mendoza": {
+                    tooltip: {
+                        content: "Mendoza"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogmendoza").modal();
+                            });
+                        }
+                    }
+                },
+
+                "sanjuan": {
+                    tooltip: {
+                        content: "San Juan"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogsanjuan").modal();
+                            });
+                        }
+                    }
+                },
+
+                "larioja": {
+                    tooltip: {
+                        content: "La Rioja"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialoglarioja").modal();
+                            });
+                        }
+                    }
+                },
+
+                "catamarca": {
+                    tooltip: {
+                        content: "Catamarca"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogcatamarca").modal();
+                            });
+                        }
+                    }
+                },
+
+                "tucuman": {
+                    tooltip: {
+                        content: "Tucum&aacute;n"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogtucuman").modal();
+                            });
+                        }
+                    }
+                },
+
+                "santiago": {
+                    tooltip: {
+                        content: "Santiago del Estero"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogsantiago").modal();
+                            });
+                        }
+                    }
+                },
+
+                "salta": {
+                    tooltip: {
+                        content: "Salta"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogsalta").modal();
+                            });
+                        }
+                    }
+                },
+
+                "jujuy": {
+                    tooltip: {
+                        content: "Jujuy"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogjujuy").modal();
+                            });
+                        }
+                    }
+                },
+
+                "formosa": {
+                    tooltip: {
+                        content: "Formosa"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogformosa").modal();
+                            });
+                        }
+                    }
+                },
+
+                "entrerios": {
+                    tooltip: {
+                        content: "Entre R&iacute;os"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogentrerios").modal();
+                            });
+                        }
+                    }
+                },
+
+                "chaco": {
+                    tooltip: {
+                        content: "Chaco"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogchacho").modal();
+                            });
+                        }
+                    }
+                },
+
+                "corrientes": {
+                    tooltip: {
+                        content: "Corrientes"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogcorrientes").modal();
+                            });
+                        }
+                    }
+                },
+
+                "misiones": {
+                    tooltip: {
+                        content: "Misiones"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogmisiones").modal();
+                            });
+                        }
+                    }
+                },
+
+                "cordoba": {
+                    tooltip: {
+                        content: "C&oacute;rdoba"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogcordoba").modal();
+                            });
+                        }
+                    }
+                },
+
+                "santafe": {
+                    tooltip: {
+                        content: "Santa Fe"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogsantafe").modal();
+                            });
+                        }
+                    }
+                },
+
+                "CABA": {
+                    tooltip: {
+                        content: "Ciudad Aut&oacute;noma de Buenos Aires"
+                    },
+                    eventHandlers: {
+                        click: function(e, id, mapElem, textElem) {
+                            $(document).ready(function() {
+                                $("#dialogcaba").modal();
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
