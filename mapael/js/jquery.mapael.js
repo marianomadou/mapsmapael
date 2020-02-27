@@ -2580,14 +2580,14 @@
                 defaultArea: {
                     attrs: {
                         //fill: "#343434",
-                        fill: "#0695d6",
+                        fill: "#109bd7",
                         //stroke: "#5d5d5d",
                         stroke: "#C6C6C6",
                         "stroke-width": 1,
                         "stroke-linejoin": "round"
                     },
                     attrsHover: {
-                        fill: "#f38a03",
+                        fill: "#31baec",
                         animDuration: 300
                     },
 
